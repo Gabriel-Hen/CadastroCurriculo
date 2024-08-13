@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-	  <Nullable>disable</Nullable>
-	  <InvariantGlobalization>false</InvariantGlobalization>
-	  <ServerGarbageCollection>false</ServerGarbageCollection>
+	<Nullable>disable</Nullable>
+	<InvariantGlobalization>false</InvariantGlobalization>
+	<ServerGarbageCollection>false</ServerGarbageCollection>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>a53140af-0428-4e8b-9333-ec92d93b52ad</UserSecretsId>
+    <UserSecretsId>7916bc56-8587-44a3-8f72-f4651bdbed73</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
