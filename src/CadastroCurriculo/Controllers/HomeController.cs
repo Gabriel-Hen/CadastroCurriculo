@@ -1,30 +1,111 @@
-using CadastroCurriculo.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Core.Interfaces.Services;
+using Core.Entities;
+using Core.Exceptions;
+using CadastroCurriculo.Authorization;
+using Core.Models.Requests;
+using FluentValidation.AspNetCore;
 
 namespace CadastroCurriculo.Controllers;
+[AllowAnonymous]
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
-
+    [HttpGet]
     public IActionResult Index()
     {
         return View();
     }
 
-    public IActionResult Privacy()
+    [HttpPost("login")]
+    public async Task<IActionResult> LogIn(
+        [FromServices] IUserService userService,
+        [FromForm] AuthenticationRequest request
+    )
     {
+        if (!ModelState.IsValid)
+        {
+            return Index();
+        }
+
+        var usuario = await GetUserAsync(userService, request);
+
+        if (usuario == null)
+        {
+            ModelState.AddModelError("login", "Usuário ou senha inválida");
+            return Index();
+        }
+
+        var claimPrincipal = ClaimsPrincipalFactory.Create(usuario);
+        var authProperties = new AuthenticationProperties
+        {
+            IsPersistent = request.KeepLoggedIn,
+            ExpiresUtc = DateTime.UtcNow.AddHours(20),
+            RedirectUri = "/"
+        };
+
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            claimPrincipal,
+            authProperties
+        );
+
+        return RedirectToAction("Index", "Dashboard");
+    }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme);
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet("criar-conta")]
+    public IActionResult CreateAccount()
+    {
+        return View(new CreateAccountRequest());
+    }
+
+    [HttpPost("criar-conta")]
+    public async Task<IActionResult> CreateAccount(
+        [FromForm] CreateAccountRequest createAccountRequest,
+        [FromServices] IUserService userService
+    )
+    {
+        if (!ModelState.IsValid)
+        {
+            return CreateAccount();
+        }
+
+        try
+        {
+            var user = await userService.Create(createAccountRequest);
+
+            TempData["Sucesso"] = "Cadastro de conta realizado com sucesso";
+        }
+        catch (ValidationException ex)
+        {
+            ex.ValidationResult.AddToModelState(ModelState);
+
+            return CreateAccount();
+        }
+
         return View();
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    private static async Task<User> GetUserAsync(IUserService userService, AuthenticationRequest authentication)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        try
+        {
+            return await userService.GetByEmailPassword(authentication.Email, authentication.Password);
+        }
+        catch (NotFoundException)
+        {
+            return null;
+        }
     }
 }

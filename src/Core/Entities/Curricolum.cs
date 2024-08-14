@@ -1,8 +1,11 @@
 ﻿using Core.Enums;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities;
 public class Curricolum
 {
+    [Key]
     public int Id { get; set; }
     public int PersonId { get; set; }
     public string Name { get; set; }

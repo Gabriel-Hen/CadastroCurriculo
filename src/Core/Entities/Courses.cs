@@ -1,6 +1,10 @@
-﻿namespace Core.Entities;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace Core.Entities;
 public class Courses
 {
+    [Key]
     public int Id { get; set; }
     public int CurricolumId { get; set; }
     public string Name { get; set; }

@@ -1,13 +1,19 @@
 ﻿using Core.Enums;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities;
 public class User
 {
+    [Key]
     public int Id { get; set; }
-    public string Login {  get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string Phone { get; set; }
+    public string Document { get; set; }
+    public Gender Gender { get; set; }
     public string Password { get; set; }
-    public string Salt { get; set; }
     public Status Status { get; set; }
-    public DateTimeOffset CreatedAt { get; set; }
-    public DateTimeOffset UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }

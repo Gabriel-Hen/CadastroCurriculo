@@ -1,0 +1,113 @@
+﻿@using Core.Models.Requests
+@model CreateAccountRequest
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br" data-topbar-color="light" data-menu-color="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] Cadastro de Curriculo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+</head>
+
+<body class="authentication-bg">
+    <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-4 col-lg-5">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <div class="text-center w-75 m-auto">
+                                <h4 class="text-dark-50 text-center pb-0 fw-bold">Cadastro de Conta</h4>
+                            </div>
+                            <form action="~/criar-conta" method="post" novalidate>
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                        <input asp-for="Name" class="form-control" required="" placeholder="Nome completo*">
+                                        <span asp-validation-for="Name"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                        <input asp-for="Email" class="form-control" type="email" id="emailaddress" required="" placeholder="E-mail*">
+                                        <span asp-validation-for="Email"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                        <div class="input-group input-group-merge">
+                                            <input asp-for="Password" type="password" id="pass" class="form-control" placeholder="Senha*">
+                                            <span asp-validation-for="Password"></span>
+                                            <a id="btn-pass" class="btn btn-dark bi bi-eye"></a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                        <div class="input-group input-group-merge">
+                                            <input asp-for="ConfirmPassword" type="password" id="confirm-pass" class="form-control" placeholder="Confirme sua senha*">
+                                            <span asp-validation-for="ConfirmPassword"></span>
+                                            <a id="btn-confirm-pass" class="btn btn-dark bi bi-eye"></a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <label asp-for="Phone" class="form-label">Contato</label>
+                                        <input asp-for="Phone" class="form-control" placeholder="(00) 0000-0000">
+                                        <span asp-validation-for="Phone"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="Document" class="form-label">Cpf</label>
+                                        <input asp-for="Document" class="form-control" placeholder="000.000.000-00">
+                                        <span asp-validation-for="Document"></span>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button class="btn btn-primary" type="submit"> Cadastrar </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).on("click", "#btn-pass", function () {
+            if ($("#pass").attr("type") == "text") {
+                $("#pass").attr("type", "password");
+                $("#btn-pass").attr("class", "btn btn-dark bi bi-eye");
+            } else {
+                $("#pass").attr("type", "text");
+                $("#btn-pass").attr("class", "btn btn-dark bi bi-eye-slash");
+            }
+        });
+
+        $(document).on("click", "#btn-confirm-pass", function () {
+            if ($("#confirm-pass").attr("type") == "text") {
+                $("#confirm-pass").attr("type", "password");
+                $("#btn-confirm-pass").attr("class", "btn btn-dark bi bi-eye");
+            } else {
+                $("#confirm-pass").attr("type", "text");
+                $("#btn-confirm-pass").attr("class", "btn btn-dark bi bi-eye-slash");
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+﻿@using Core;
+@{
+    var mensagem = TempData["Success"] as string;
+}
+
+@if (mensagem != null)
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-success mt-2" role="alert">
+                <p class="mb-0">
+                    @Html.Raw(@mensagem)
+                </p>
+            </div>
+        </div>
+    </div>
+}
