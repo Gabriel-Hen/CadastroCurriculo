@@ -16,7 +16,7 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        return View();
+        return View("Index");
     }
 
     [HttpPost("login")]
@@ -52,7 +52,7 @@ public class HomeController : Controller
             authProperties
         );
 
-        return RedirectToAction("Index", "Dashboard");
+        return RedirectToAction("Index", "Curricolum");
     }
 
     [HttpPost("logout")]
@@ -94,7 +94,7 @@ public class HomeController : Controller
             return CreateAccount();
         }
 
-        return View();
+        return RedirectToAction("Index", "Curricolum");
     }
 
     private static async Task<User> GetUserAsync(IUserService userService, AuthenticationRequest authentication)

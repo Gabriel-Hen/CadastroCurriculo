@@ -15,17 +15,19 @@ public class UserRepository : IUserRepository
     }
     public async Task<User> Create(User user)
     {
-        User entity = _dbSet.CreateProxy();
-        _dbContext.Entry(entity).CurrentValues.SetValues(user);
-
-        await _dbSet.AddAsync(entity);
+        await _dbSet.AddAsync(user);
         await _dbContext.SaveChangesAsync();
 
-        return entity;
+        return user;
     }
 
     public async Task<User> GetByEmailPassword(string email, string password)
     {
-        return await _dbSet.Where(user => user.Email == email && user.Password == password).FirstAsync();
+        return await _dbSet.Where(user => user.Email == email && user.Password == password).FirstOrDefaultAsync();
+    }
+
+    public async Task<User> GetById(int id)
+    {
+        return await _dbSet.FindAsync(id);
     }
 }

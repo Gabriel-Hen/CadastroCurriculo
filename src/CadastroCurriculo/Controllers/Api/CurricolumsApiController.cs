@@ -1,11 +1,12 @@
-﻿using Core;
+﻿using CadastroCurriculo.Models;
+using Core;
 using Core.Entities;
 using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CadastroCurriculo.Controllers.api;
 
-[Route("curriculo-api")]
+[Route("api/curriculo"), ApiController]
 public class CurricolumsApiController : Controller
 {
     private readonly ICurricolumService _curricolumService;
@@ -14,10 +15,24 @@ public class CurricolumsApiController : Controller
     {
         _curricolumService = curricolumService;
     }
-    [HttpGet("{userId}/obter-todos")]
-    public async Task<IActionResult> GetCurricolums(int userId)
+
+    [HttpGet("obter-todos")]
+    public async Task<IActionResult> GetCurricolums(
+        [FromServices] AuthenticatedUser authenticatedUser,
+        [FromQuery] string search, int draw, int start, int length
+    )
     {
-        var curricolums = _curricolumService.GetAll(userId);
+        var curricolums = await _curricolumService.GetAll(authenticatedUser.Id);
+        var totalRecords = curricolums.Count();
+        var result = new DataTableResponse<Curricolum>()
+        {
+            Draw = draw,
+            RecordsTotal = totalRecords,
+            RecordsFiltered = totalRecords,
+            Data = curricolums.Skip(start).Take(length).ToList()
+        };
+
+        return Ok(result);
         return Ok(curricolums);
     }
 }

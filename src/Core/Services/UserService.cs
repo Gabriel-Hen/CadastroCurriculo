@@ -29,4 +29,9 @@ public class UserService : IUserService
     {
         return _userRepository.GetByEmailPassword(email, password);
     }
+
+    public async Task<User> GetById(int id)
+    {
+        return await _userRepository.GetById(id);
+    }
 }

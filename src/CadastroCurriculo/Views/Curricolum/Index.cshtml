@@ -14,13 +14,14 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-12 overflow-auto">
-                <table id="listagem" class="table table-striped wrap"></table>
-            </div>
             <div class="row mb-3">
                 <div class="col-12" style="margin-top: 10px">
-                    <a class="btn btn-success" href="~/cadastrar">Cadastrar Curriculo</a>
+                    <a class="btn btn-success" href="~/curriculo/cadastrar">Cadastrar Curriculo</a>
                 </div>
+            </div>
+            <div class="col-12 overflow-auto">
+                <table id="listagem" class="table table-striped wrap w-100">
+                </table>
             </div>
         </div>
     </div>
@@ -28,97 +29,78 @@
 
 @section Scripts {
     <script type="text/javascript">
-        var datatable = $("#listagem").DataTable({
-            language: {
-                url: "@Url.Content("~/json/datatables-pt-br.json")"
-            },
-            order: [[0, "asc"]],
-            serverSide: true,
-            searchDelay: 100,
-            searching: true,
-            lengthChange: true,
-            layout: {
-                topStart: 'search',
-                topEnd: 'pageLength',
-                bottom: 'paging',
-                bottomStart: 'info',
-                bottomEnd: null
-            },
-            ajax: {
-                url: "/api/curriculo-api/@authenticatedUser.Id/obter-todos",
-                type: "GET",
-                data: function (table) {
-                    var search = table.search.value;
-                    var draw = table.draw;
-                    var start = table.start;
-                    var length = table.length;
+        $(document).ready(function () {
+            "use strict";
 
-                    return {
-                        search,
-                        draw,
-                        start,
-                        length
+            var datatable = $("#listagem").DataTable({
+                order: [2, 'desc'],
+                language: {
+                    url: "@Url.Content("~/json/datatables-pt-br.json")"
+                },
+                serverSide: true,
+                searchDelay: 1000,
+                ajax: {
+                    url: "/api/curriculo/obter-todos",
+                    type: "GET",
+                    data: function (table) {
+                        var search = table.search.value;
+                        var draw = table.draw;
+                        var start = table.start;
+                        var length = table.length;
+
+                        return {
+                            search,
+                            draw,
+                            start,
+                            length
+                        }
+                    },
+                    dataSrc: function (json) {
+                        return json.data;
                     }
                 },
-                dataSrc: function (json) {
-                    return json.data;
-                }
-            },
-            columns: [
-                {
-                    data: "name",
-                    name: "name",
-                    title: "Nome",
-                    visible: true,
-                    searchable: true,
-                    orderable: true
-                },
-                {
-                    data: "salaryExpectation",
-                    name: "salaryExpectation",
-                    title: "Pretensao Salarial",
-                    visible: true,
-                    searchable: true,
-                    orderable: true
-                },
-                {
-                    data: "id",
-                    name: "editar",
-                    title: "Editar",
-                    orderable: false,
-                    searchable: false,
-                    render: function (data, type, row) {
-                        return `<a class="bi bi-pencil" href="~/curriculo/${data}/editar" title="Editar curriculo"></a>`;
-
+                columns: [
+                    { data: "name", name: "Name", title: "Nome" },
+                    { data: "salaryExpectation", name: "SalaryExpectation", title: "Pretensao" },
+                    {
+                        data: "editar",
+                        name: "Editar",
+                        title: "Editar",
+                        orderable: false,
+                        render: function (data, display, curriculo) {
+                            return '<a class="edit bi bi-pencil-square" href="/curriculo/{{CurriculoId}}/editar"></a>'
+                                .replace("{{CurriculoId}}", curriculo.id);
+                        }
+                    },
+                    {
+                        data: "deletar",
+                        name: "Deletar",
+                        title: "Deletar",
+                        className: "text-end",
+                        orderable: false,
+                        render: function (data, display, curriculo) {
+                            return '<a class="consumir bi bi-trash-fill" data-id="{{CurriculoId}}" href="#"></a>'
+                                .replace("{{CurriculoId}}", curriculo.id)
+                        }
                     }
-                },
-                {
-                    data: "id",
-                    name: "deletar",
-                    title: "Deletar",
-                    orderable: false,
-                    searchable: false,
-                    render: function (data, type, row) {
-                        return `<a class="text-danger bi bi-trash delete-curricolum" data-url="~/curriculo/${data}/delete" title="Deletar curriculo"></a>`
-                    }
-                }
-            ]
-        });
-
-        $(document).on('click', '.deletar-curricolum', function (e) {
-            let UrlDelete = $(this).attr("data-url")
-            bootbox.confirm({
-                size: 'medium',
-                message: 'Deseja excluir esse curriculo?',
-                callback: function (result) {
-                    $.ajax({
-                        method: "DELETE",
-                        url: UrlDelete,
-                    }).always(function (result) {
-                        location.reload();
-                    })
-                }
+                ]
             });
+
+            $(document).on('click', '.deletar-curricolum', function (e) {
+                let UrlDelete = $(this).attr("data-url")
+                bootbox.confirm({
+                    size: 'medium',
+                    message: 'Deseja excluir esse curriculo?',
+                    callback: function (result) {
+                        $.ajax({
+                            method: "DELETE",
+                            url: UrlDelete,
+                        }).always(function (result) {
+                            location.reload();
+                        })
+                    }
+                });
+            })
         })
     </script>
 }

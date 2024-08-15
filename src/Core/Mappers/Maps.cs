@@ -10,5 +10,7 @@ public class Maps : Profile
         CreateMap<CreateAccountRequest, User>().ReverseMap();
 
         CreateMap<CurricolumRequest, Curricolum>().ReverseMap();
+        CreateMap<ProfessionalExperienceRequest, ProfessionalExperience>().ReverseMap();
+        CreateMap<CourseRequest, Course>().ReverseMap();
     }
 }

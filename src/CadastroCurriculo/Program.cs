@@ -1,13 +1,31 @@
+using AutoMapper;
 using CadastroCurriculo;
+using CadastroCurriculo.Authorization;
+using CadastroCurriculo.Extensions;
+using CadastroCurriculo.ModelBinders;
 using Core.Mappers;
 using Data;
 using DataBase;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using SindicosInterno.Extensions;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(x =>
+{
+    x.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+    x.ModelBinderProviders.Insert(1, new DateTimeModelBinderProvider());
+    x.ModelBinderProviders.Insert(2, new OnlyNumbersBinderProvider());
+    x.ModelBinderProviders.Insert(3, new PesquisaModelBinderProvider());
+})
+.AddJsonOptions(opts =>
+{
+    var enumConverter = new JsonStringEnumConverter();
+    opts.JsonSerializerOptions.Converters.Add(enumConverter);
+});
 
 var configurations = builder.Configuration.Get<AppSettings>();
 builder.Services.AddDbContext<DatabaseContext>(
@@ -16,9 +34,43 @@ builder.Services.AddDbContext<DatabaseContext>(
         ServerVersion.AutoDetect(configurations.DbConnection.ConnectionString)
     )
 );
-builder.Services.AddAutoMapper(typeof(Maps));
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+
+    options.ForwardLimit = null;
+});
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(x =>
+    {
+        x.LoginPath = "/";
+        x.LogoutPath = "/logout";
+        x.AccessDeniedPath = "/";
+        x.EventsType = typeof(CustomCookieAuthenticationEvents);
+    });
+
+builder.Services.AddCors(o => o.AddPolicy("AllowCors", builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
+
+builder.Services.AddScoped<CustomCookieAuthenticationEvents>();
+
+builder.Services.AddSingleton(provider => new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile(new Maps());
+}).CreateMapper());
+
 builder.Services.AddRepositories();
 builder.Services.AddServices();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthenticatedUser();
 
 builder.Services.AddHostedService(serviceProvider => new InitDataBaseServices(serviceProvider));
 

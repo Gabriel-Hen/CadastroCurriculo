@@ -1,0 +1,49 @@
+﻿@using Core.Models.Requests
+@using Core.Enums
+@model CurricolumRequest;
+
+<partial name="_Messages" />
+
+<form class="form-horizontal" id="form" action="~/curriculo/cadastrar" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">Cadastro de Curriculo</h4>
+
+            <div class="row mb-2 gy-2">
+                <div class="col-sm-6 col-md-4">
+                    <label asp-for="Name" class="col-form-label col-form-label-sm">Nome do Curriculo*:</label>
+                    <input asp-for="Name" class="form-control form-control-sm" />
+                    <span asp-validation-for="Name"></span>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <label asp-for="Description" class="col-form-label col-form-label-sm">Descricao*:</label>
+                    <input asp-for="Description" class="form-control form-control-sm" />
+                    <span asp-validation-for="Description"></span>
+                </div>
+            </div>
+
+            <div class="row gy-2">
+                <div class="col-sm-6 col-md-4">
+                    <label asp-for="SchoolLevel" class="col-form-label col-form-label-sm">Nivel escolar*:</label>
+                    <select asp-for="SchoolLevel" asp-items="Html.GetEnumSelectList<SchoolLevel>()" data-toggle="select2" class="select2 form-control form-control-sm">
+                    </select>
+                    <span asp-validation-for="SchoolLevel"></span>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <label asp-for="SalaryExpectation" class="col-form-label col-form-label-sm">Pretencao salarial*:</label>
+                    <input asp-for="SalaryExpectation" class="form-control form-control-sm" />
+                    <span asp-validation-for="SalaryExpectation"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+</form>

@@ -6,27 +6,22 @@
     <title>@ViewData["Title"] Cadastro Curriculo</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
-    <link rel="stylesheet" href="~/css/datatables.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="~/lib/datatables-1.11.4/css/datatables.bootstrap5.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/CadastroCurriculo.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CadastroCurriculo</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                <a class="navbar-brand" asp-area="" asp-controller="Curricolum" asp-action="Index">Inicio</a>
+                <div class="dropdown mr-5">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="~/perfil">Perfil</a></li>
+                        <li><a class="dropdown-item" href="~/home/logout">Sair</a></li>
                     </ul>
                 </div>
             </div>
@@ -44,11 +39,15 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/datatables-1.11.4/js/jquery.datatables.min.js"></script>
+    <script src="~/lib/datatables-1.11.4/js/datatables.bootstrap5.min.js"></script>
+    <script src="~/lib/jquery-mask-plugin/jquery.mask.min.js"></script>
+    <script src="~/lib/jquery-plugin-mask-money/jquery.maskMoney.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootbox.js/bootbox.min.js"></script>
-    <script src="~/js/datatables.min.js"></script>
+   
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)

@@ -7,7 +7,7 @@ namespace Data;
 public class InitDataBaseServices : IHostedLifecycleService
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly IList<Action<IServiceProvider>>? _actions;
+    private readonly IList<Action<IServiceProvider>> _actions;
 
     public InitDataBaseServices(
         IServiceProvider serviceProvider,

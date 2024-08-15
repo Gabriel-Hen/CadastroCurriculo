@@ -1,12 +1,8 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace Core.Entities;
-public class ProfessionalExperiencies
+namespace Core.Models.Requests;
+public class ProfessionalExperienceRequest
 {
-    [Key]
-    public int Id { get; set; }
-    public int CurricolumId { get; set; }
     public string Role { get; set; }
     public string Description { get; set; }
     public string CompanyName { get; set; }
