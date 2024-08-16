@@ -1,4 +1,5 @@
-﻿@using Core.Models.Requests
+﻿@using Core.Enums
+@using Core.Models.Requests
 @model CreateAccountRequest
 @{
     Layout = null;
@@ -25,7 +26,7 @@
                             <div class="text-center w-75 m-auto">
                                 <h4 class="text-dark-50 text-center pb-0 fw-bold">Cadastro de Conta</h4>
                             </div>
-                            <form action="~/criar-conta" method="post" novalidate>
+                            <form action="~/criar-conta" method="post" class="needs-validation" novalidate>
                                 <div class="row mb-2">
                                     <div class="col-md-12">
                                         <input asp-for="Name" class="form-control" required="" placeholder="Nome completo*">
@@ -44,8 +45,8 @@
                                     <div class="col-md-12">
                                         <div class="input-group input-group-merge">
                                             <input asp-for="Password" type="password" id="pass" class="form-control" placeholder="Senha*">
-                                            <span asp-validation-for="Password"></span>
                                             <a id="btn-pass" class="btn btn-dark bi bi-eye"></a>
+                                            <span asp-validation-for="Password"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -54,22 +55,31 @@
                                     <div class="col-md-12">
                                         <div class="input-group input-group-merge">
                                             <input asp-for="ConfirmPassword" type="password" id="confirm-pass" class="form-control" placeholder="Confirme sua senha*">
-                                            <span asp-validation-for="ConfirmPassword"></span>
                                             <a id="btn-confirm-pass" class="btn btn-dark bi bi-eye"></a>
+                                            <span asp-validation-for="ConfirmPassword"></span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row mb-2">
-                                    <div class="col-md-6">
-                                        <label asp-for="Phone" class="form-label">Contato</label>
+                                    <div class="col-md-12">
+                                        <label asp-for="Phone" class="form-label">Contato*</label>
                                         <input asp-for="Phone" class="form-control" placeholder="(00) 0000-0000">
                                         <span asp-validation-for="Phone"></span>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label asp-for="Document" class="form-label">Cpf</label>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                        <label asp-for="Document" class="form-label">Cpf*</label>
                                         <input asp-for="Document" class="form-control" placeholder="000.000.000-00">
                                         <span asp-validation-for="Document"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-12">
+                                        <label asp-for="Gender" class="form-label">Genero*</label>
+                                        <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" data-toggle="select2" class="select2 form-select form-control"></select>
+                                        <span asp-validation-for="Gender"></span>
                                     </div>
                                 </div>
 

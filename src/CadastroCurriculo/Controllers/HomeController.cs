@@ -55,7 +55,7 @@ public class HomeController : Controller
         return RedirectToAction("Index", "Curricolum");
     }
 
-    [HttpPost("logout")]
+    [HttpGet("logout")]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(
@@ -85,7 +85,22 @@ public class HomeController : Controller
         {
             var user = await userService.Create(createAccountRequest);
 
-            TempData["Sucesso"] = "Cadastro de conta realizado com sucesso";
+            TempData["Success"] = "Cadastro de conta realizado com sucesso";
+
+            var claimPrincipal = ClaimsPrincipalFactory.Create(user);
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                ExpiresUtc = DateTime.UtcNow.AddHours(20),
+                RedirectUri = "/"
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                claimPrincipal,
+                authProperties
+            );
+
         }
         catch (ValidationException ex)
         {

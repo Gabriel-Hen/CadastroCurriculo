@@ -12,7 +12,7 @@ public class ProfessionalExperience
     public string Description { get; set; }
     public string CompanyName { get; set; }
     public DateOnly InitialDate { get; set; }
-    public DateOnly EndDate { get; set; }
+    public DateOnly? EndDate { get; set; }
 
     [ForeignKey(nameof(CurricolumId))]
     public Curricolum Curricolum { get; set; }

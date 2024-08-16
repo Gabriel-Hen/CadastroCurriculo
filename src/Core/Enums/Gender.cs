@@ -1,6 +1,12 @@
-﻿namespace Core.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Core.Enums;
 public enum Gender
 {
+    [Display(Name = "Feminino")]
     Femele,
-    Male
+    [Display(Name = "Masculino")]
+    Male,
+    [Display(Name = "Outro")]
+    Other
 }

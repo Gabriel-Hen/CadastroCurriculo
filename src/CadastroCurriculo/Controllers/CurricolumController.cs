@@ -3,11 +3,12 @@ using Core.Exceptions;
 using Core.Interfaces.Services;
 using Core.Models.Requests;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CadastroCurriculo.Controllers;
 
-[Route("curriculo")]
+[Route("curriculo"), Authorize]
 public class CurricolumController : Controller
 {
     private readonly ICurricolumService _curricolumService;
@@ -52,5 +53,19 @@ public class CurricolumController : Controller
 
             return Create();
         }
+    }
+
+    [HttpGet("experiencia-profisional")]
+    public IActionResult _Experience(int index) 
+    {
+        ViewData["index"] = index;
+        return PartialView(new ProfessionalExperienceRequest());
+    }
+
+    [HttpGet("curso")]
+    public IActionResult _Course(int index)
+    {
+        ViewData["index"] = index;
+        return PartialView(new CourseRequest());
     }
 }

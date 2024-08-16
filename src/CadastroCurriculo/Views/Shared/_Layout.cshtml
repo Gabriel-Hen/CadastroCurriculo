@@ -1,11 +1,13 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] Cadastro Curriculo</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/lib/jquery-ui-1.14.0/jquery-ui.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link href="~/lib/datatables-1.11.4/css/datatables.bootstrap5.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/CadastroCurriculo.styles.css" asp-append-version="true" />
@@ -21,7 +23,7 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="~/perfil">Perfil</a></li>
-                        <li><a class="dropdown-item" href="~/home/logout">Sair</a></li>
+                        <li><a class="dropdown-item" asp-action="Logout" asp-controller="Home">Sair</a></li>
                     </ul>
                 </div>
             </div>
@@ -38,17 +40,27 @@
             &copy; 2024 - CadastroCurriculo - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ui/ui/i18n/datepicker-pt-BR.js"></script>
+    <script src="~/js/lib.min.js"></script>
+    <script src="~/lib/jquery-ui-1.14.0/jquery-ui.min.js"></script>
+    <script src="~/lib/momentjs/momentjs.min.js"></script>
+    <script src="~/lib/momentjs/pt-br.js"></script>
+    <script src="~/lib/momentjs/configurar-pt-br.js"></script>
     <script src="~/lib/datatables-1.11.4/js/jquery.datatables.min.js"></script>
     <script src="~/lib/datatables-1.11.4/js/datatables.bootstrap5.min.js"></script>
-    <script src="~/lib/jquery-mask-plugin/jquery.mask.min.js"></script>
-    <script src="~/lib/jquery-plugin-mask-money/jquery.maskMoney.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
+    <script src="~/js/jquery-custom-validators.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootbox.js/bootbox.min.js"></script>
    
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/app.js"></script>
+    <script src="~/js/jquery-extensions.js"></script>
+    <script src="~/js/curricolum.js"></script>
+    <script src="~/js/site.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

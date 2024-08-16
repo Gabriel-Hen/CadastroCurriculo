@@ -15,6 +15,7 @@ public static class AuthenticatedUserService
             {
                 Id = int.Parse(user.Id()),
                 Name = user.Name(),
+                Phone = user.Phone(),
             };
         });
     }

@@ -32,25 +32,41 @@ public class CurricolumService : ICurricolumService
         var curricolum = _mapper.Map<Curricolum>(request);
         curricolum.UserId = authenticatedUserId;
         var curricolumCreated = await _curricolumRepository.Create(curricolum);
-        //request.ProfessionalExperiences.Select(
-        //    async professionalExperience => await _professionExperienceService.Create(
-        //        curricolumCreated.Id,
-        //        professionalExperience
-        //    )
-        //);
+        if (request.ProfessionalExperiences.Any())
+        {
+            request.ProfessionalExperiences.Select(
+                async professionalExperience => await _professionExperienceService.Create(
+                    curricolumCreated.Id,
+                    professionalExperience
+                )
+            );
+        }
 
-        //request.Courses.Select(
-        //    async course => await _courseService.Create(
-        //        curricolumCreated.Id,
-        //        course
-        //    )
-        //);
+        if (request.Courses.Any())
+        {
+            request.Courses.Select(
+                async course => await _courseService.Create(
+                    curricolumCreated.Id,
+                    course
+                )
+            );
+        }
 
         return curricolumCreated;
     }
 
-    public async Task<IEnumerable<Curricolum>> GetAll(int userId)
+    public async Task<IEnumerable<Curricolum>> GetAll()
     {
-        return await _curricolumRepository.GetAll(userId);
+        return await _curricolumRepository.GetAll();
+    }
+
+    public async Task<IEnumerable<Curricolum>> GetAllByUserId(int userId)
+    {
+        return await _curricolumRepository.GetAllByUserId(userId);
+    }
+
+    public async Task<Curricolum> GetById(int id)
+    {
+        return await _curricolumRepository.GetById(id);
     }
 }

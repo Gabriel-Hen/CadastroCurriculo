@@ -22,7 +22,7 @@ public class CurricolumsApiController : Controller
         [FromQuery] string search, int draw, int start, int length
     )
     {
-        var curricolums = await _curricolumService.GetAll(authenticatedUser.Id);
+        var curricolums = await _curricolumService.GetAllByUserId(authenticatedUser.Id);
         var totalRecords = curricolums.Count();
         var result = new DataTableResponse<Curricolum>()
         {
@@ -33,6 +33,5 @@ public class CurricolumsApiController : Controller
         };
 
         return Ok(result);
-        return Ok(curricolums);
     }
 }

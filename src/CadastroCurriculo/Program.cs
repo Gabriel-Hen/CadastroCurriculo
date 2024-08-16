@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using SindicosInterno.Extensions;
+using System.Globalization;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -88,7 +89,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowCors");
+var ptBr = Culture.GetPtBr();
+
 app.UseStaticFiles();
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(ptBr),
+    SupportedCultures = new List<CultureInfo> { ptBr },
+    SupportedUICultures = new List<CultureInfo> { ptBr }
+});
 
 app.UseRouting();
 app.UseCookiePolicy(new CookiePolicyOptions

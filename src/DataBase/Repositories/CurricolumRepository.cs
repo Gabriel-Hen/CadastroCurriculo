@@ -22,13 +22,18 @@ public class CurricolumRepository : ICurricolumRepository
         return curricolum;
     }
 
-    public async Task<IEnumerable<Curricolum>> GetAll(int userId)
+    public async Task<IEnumerable<Curricolum>> GetAll()
     {
-        return await _dbSet.Where(curricolum => curricolum.UserId == userId).ToListAsync();
+        return await _dbSet.ToListAsync();
     }
 
     public async Task<Curricolum> GetById(int id)
     {
         return await _dbSet.Include(c => c.ProfessionalExperience).Include(c => c.Courses).FirstOrDefaultAsync(c => c.Id == id);
+    }
+
+    public async Task<IEnumerable<Curricolum>> GetAllByUserId(int userId)
+    {
+        return await _dbSet.Where(c => c.UserId == userId).ToListAsync();
     }
 }

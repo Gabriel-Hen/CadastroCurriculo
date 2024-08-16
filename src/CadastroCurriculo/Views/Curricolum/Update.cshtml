@@ -1,0 +1,118 @@
+﻿@using Core
+@using Core.Models.Requests
+@using Core.Enums
+@model CurricolumRequest;
+@inject AuthenticatedUser authenticatedUser;
+
+<partial name="_Messages" />
+
+<form class="form-horizontal needs-validation" id="form" action="~/curriculo/cadastrar" method="post" novalidate>
+    @Html.AntiForgeryToken()
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">Dados</h4>
+
+            <div class="row mb-2 gy-2">
+                <div class="col-sm-6 col-md-4">
+                    <label class="col-form-label col-form-label-sm">Nome completo:</label>
+                    <input class="form-control form-control-sm" value="@authenticatedUser.Name" disabled />
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <label class="col-form-label col-form-label-sm">Telefone:</label>
+                    <input class="form-control form-control-sm" value="@authenticatedUser.Phone" disabled />
+                </div>
+            </div>
+
+            <div class="row mb-2 gy-2">
+                <div class="col-sm-5 col-md-4">
+                    <label asp-for="Name" class="col-form-label col-form-label-sm">Nome do Curriculo*:</label>
+                    <input asp-for="Name" class="form-control form-control-sm" required />
+                    <span asp-validation-for="Name"></span>
+                </div>
+
+                <div class="col-sm-5 col-md-4">
+                    <label asp-for="SchoolLevel" class="col-form-label col-form-label-sm">Nivel escolar*:</label>
+                    <select asp-for="SchoolLevel" asp-items="Html.GetEnumSelectList<SchoolLevel>()" data-toggle="select2" class="select2 form-select form-control form-control-sm">
+                    </select>
+                    <span asp-validation-for="SchoolLevel"></span>
+                </div>
+
+                <div class="col-sm-2 col-md-2">
+                    <label asp-for="SalaryExpectation" class="col-form-label col-form-label-sm">Pretencao salarial*:</label>
+                    <input asp-for="SalaryExpectation" class="form-control form-control-sm" required />
+                    <span asp-validation-for="SalaryExpectation"></span>
+                </div>
+            </div>
+
+            <div class="row gy-2">
+                <div class="col-sm-12 col-md-12">
+                    <label asp-for="Description" class="col-form-label col-form-label-sm">Descricao*:</label>
+                    <textarea asp-for="Description" type="tex" class="form-control form-control-sm" required></textarea>
+                    <span asp-validation-for="Description"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h4>Experiencias profissionais</h4>
+            @for(int i = 0; i < Model.ProfessionalExperiences.Count(); i++)
+            {
+                <partial name="_ExperienceUpdate" for="@Model.ProfessionalExperiences.ToList()[i]" prefix="ProfessionalExperience[@i]"></partial>
+            }
+            <div id="professionalExperienceContainer"></div>
+            <button type="button" class="btn btn-success bi bi-plus" id="addProfessionalExperience">Adicionar</button>
+        </div>
+        <div class="card-body">
+            <h4>Cursos</h4>
+            @for(int i = 0; i < Model.Courses.Count(); i++)
+            {
+                <partial name="_CourseUpdate" for="@Model.Courses.ToList()[i]" prefix="Course[@i]"></partial>
+            }
+            <div id="coursesContainer"></div>
+            <button type="button" class="btn btn-success bi bi-plus" id="addCourse">Adicionar</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            let experienciaIndex = @Model.ProfessionalExperiences.Count();
+            let cursoIndex = @Model.Courses.Count();
+
+            $('#addProfessionalExperience').click(function () {
+                $.get('@Url.Action("_Experience", "Curricolum")', { index: experienciaIndex }, function (data) {
+                    $('#professionalExperienceContainer').append(data);
+                });
+                experienciaIndex++;
+            });
+
+            $('#addCourse').click(function () {
+                $.get('@Url.Action("_Course", "Curricolum")', { index: cursoIndex }, function (data) {
+                    $('#coursesContainer').append(data);
+                });
+                cursoIndex++;
+            });
+
+            $(document).on('click', '.remove-experience', function () {
+                $(this).closest('.experiencia-item').remove();
+            });
+
+            $(document).on('click', '.remove-course', function () {
+                $(this).closest('.curso-item').remove();
+            });
+
+            $("input[type='date']").datepicker({
+                dateFormat: 'dd/mm/yy',
+                regional: 'pt-BR'
+            });
+        });
+    </script>
+}

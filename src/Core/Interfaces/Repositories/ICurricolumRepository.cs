@@ -9,6 +9,7 @@ namespace Core.Interfaces.Repositories;
 public interface ICurricolumRepository
 {
     Task<Curricolum> GetById(int id);
-    Task<IEnumerable<Curricolum>> GetAll(int userId);
+    Task<IEnumerable<Curricolum>> GetAll();
+    Task<IEnumerable<Curricolum>> GetAllByUserId(int userId);
     Task<Curricolum> Create(Curricolum curricolum);
 }

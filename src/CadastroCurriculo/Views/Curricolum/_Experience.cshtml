@@ -1,0 +1,37 @@
+﻿@using Core.Models.Requests
+@model ProfessionalExperienceRequest;
+
+<div class="experience-item">
+    <div class="row gy-2">
+        <div class="col-sm-6 col-md-4">
+            <label class="col-form-label col-form-label-sm">Cargo:*</label>
+            <input type="text" class="form-control form-control-sm" name="ProfessionalExperiences[@ViewData["index"]].Role" required />
+        </div>
+
+        <div class="col-sm-6 col-md-4">
+            <label class="col-form-label col-form-label-sm">Empresa:*</label>
+            <input type="text" class="form-control form-control-sm" name="ProfessionalExperiences[@ViewData["index"]].CompanyName" class="form-control form-control-sm" required />
+        </div>
+    </div>
+
+    <div class="row gy-2">
+        <div class="col-sm-6 col-md-4">
+            <label class="col-form-label col-form-label-sm">Data Início:*</label>
+            <input type="date" class="form-control form-control-sm" name="ProfessionalExperiences[@ViewData["index"]].InitialDate" class="form-control form-control-sm" placeholer="dd/MM/yyyy" autocomplete="off" required />
+        </div>
+
+        <div class="col-sm-6 col-md-4">
+            <label class="col-form-label col-form-label-sm">Data Fim:</label>
+            <input type="date" class="form-control form-control-sm" name="ProfessionalExperiences[@ViewData["index"]].EndDate" class="form-control form-control-sm" placeholer="dd/MM/yyyy" autocomplete="off" />
+        </div>
+    </div>
+
+    <div class="row gy-2 mb-2">
+        <div class="col-sm-12 col-md-12">
+            <label class="col-form-label col-form-label-sm">Descricao:*</label>
+            <textarea type="text" class="form-control form-control-sm" name="ProfessionalExperiences[@ViewData["index"]].Description" class="form-control form-control-sm"></textarea>
+        </div>
+    </div>
+
+    <button type="button" class="remove-experience btn btn-danger bi bi-x-lg mb-2">Remover</button>
+</div>

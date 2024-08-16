@@ -42,22 +42,7 @@
                 ajax: {
                     url: "/api/curriculo/obter-todos",
                     type: "GET",
-                    data: function (table) {
-                        var search = table.search.value;
-                        var draw = table.draw;
-                        var start = table.start;
-                        var length = table.length;
-
-                        return {
-                            search,
-                            draw,
-                            start,
-                            length
-                        }
-                    },
-                    dataSrc: function (json) {
-                        return json.data;
-                    }
+                    
                 },
                 columns: [
                     { data: "name", name: "Name", title: "Nome" },

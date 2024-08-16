@@ -14,6 +14,7 @@ public class ClaimsPrincipalFactory
         {
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.MobilePhone, user.Phone),
             new Claim("Id", user.Id.ToString()),
             new Claim("AtualizadoEmTicks", (user.UpdatedAt ?? user.CreatedAt).Ticks.ToString()),
         };

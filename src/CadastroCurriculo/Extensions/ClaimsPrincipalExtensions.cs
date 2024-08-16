@@ -19,6 +19,11 @@ public static class ClaimsPrincipalExtensions
         return GetClaimValueOrDefault(claimsPrincipal, ClaimTypes.Email)?.Value;
     }
 
+    public static string Phone(this ClaimsPrincipal claimsPrincipal)
+    {
+        return GetClaimValueOrDefault(claimsPrincipal, ClaimTypes.MobilePhone)?.Value;
+    }
+
     private static Claim GetClaimValueOrDefault(
         ClaimsPrincipal claimsPrincipal,
         string claimType
