@@ -25,4 +25,25 @@ public class CourseService : ICourseService
 
         return courseCreated;
     }
+
+    public async Task<bool> Delete(int id)
+    {
+        return await _courseRepository.Delete(id);
+    }
+
+    public async Task<Course> Update(int curricolumId, CourseRequest courseRequest)
+    {
+        Course course;
+        if (courseRequest.Id == null)
+        {
+            course = await Create(curricolumId, courseRequest);
+        }
+        else 
+        {
+            course = _mapper.Map<Course>(courseRequest);
+            course = await _courseRepository.Update(course);
+        }
+
+        return course;
+    }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.Models.Requests;
-public class CurricolumUpdaterequest
+public class CurricolumUpdateRequest
 {
     [Required(ErrorMessage = "Nome é obrigatório")]
     public string Name { get; set; }
@@ -18,4 +18,7 @@ public class CurricolumUpdaterequest
 
     [Required(ErrorMessage = "Nivel escolar é obrigatório")]
     public SchoolLevel SchoolLevel { get; set; }
+
+    public string ProfessionalExperienceRemoved { get; set; }
+    public string CoursesRemoved { get; set; }
 }

@@ -1,8 +1,12 @@
 ﻿@using Core
 @using Core.Models.Requests
 @using Core.Enums
-@model CurricolumRequest;
+@model CurricolumUpdateRequest;
 @inject AuthenticatedUser authenticatedUser;
+@{
+    var ProfessionalExperiencesList = Model.ProfessionalExperiences.ToList();
+    var CoursesList = Model.Courses.ToList();
+}
 
 <partial name="_Messages" />
 
@@ -58,7 +62,9 @@
             <h4>Experiencias profissionais</h4>
             @for(int i = 0; i < Model.ProfessionalExperiences.Count(); i++)
             {
-                <partial name="_ExperienceUpdate" for="@Model.ProfessionalExperiences.ToList()[i]" prefix="ProfessionalExperience[@i]"></partial>
+                <partial name="_ExperienceUpdate" for="@ProfessionalExperiencesList[i]"
+                         prefix="ProfessionalExperience[@i]" view-data='new ViewDataDictionary(ViewData){{"id", ProfessionalExperiencesList[i].Id}}'>
+                </partial>
             }
             <div id="professionalExperienceContainer"></div>
             <button type="button" class="btn btn-success bi bi-plus" id="addProfessionalExperience">Adicionar</button>
@@ -67,12 +73,16 @@
             <h4>Cursos</h4>
             @for(int i = 0; i < Model.Courses.Count(); i++)
             {
-                <partial name="_CourseUpdate" for="@Model.Courses.ToList()[i]" prefix="Course[@i]"></partial>
+                <partial name="_CourseUpdate" for="@CoursesList[i]" prefix="Course[@i]" view-data='new ViewDataDictionary(ViewData){{"id", CoursesList[i].Id}}'>
+                </partial>
             }
             <div id="coursesContainer"></div>
             <button type="button" class="btn btn-success bi bi-plus" id="addCourse">Adicionar</button>
         </div>
     </div>
+
+    <input asp-for="CoursesRemoved" type="hidden" hidden />
+    <input asp-for="ProfessionalExperienceRemoved" type="hidden" hidden />
 
     <div class="card">
         <div class="card-body">
@@ -84,28 +94,36 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            let experienciaIndex = @Model.ProfessionalExperiences.Count();
-            let cursoIndex = @Model.Courses.Count();
+            let experienceIndex = @Model.ProfessionalExperiences.Count();
+            let courseIndex = @Model.Courses.Count();
+            var coursesToBeDeleted = [];
+            var experiencesToBeDeleted = [];
 
             $('#addProfessionalExperience').click(function () {
-                $.get('@Url.Action("_Experience", "Curricolum")', { index: experienciaIndex }, function (data) {
+                $.get('@Url.Action("_Experience", "Curricolum")', { index: experienceIndex }, function (data) {
                     $('#professionalExperienceContainer').append(data);
                 });
-                experienciaIndex++;
+                experienceIndex++;
             });
 
             $('#addCourse').click(function () {
-                $.get('@Url.Action("_Course", "Curricolum")', { index: cursoIndex }, function (data) {
+                $.get('@Url.Action("_Course", "Curricolum")', { index: courseIndex }, function (data) {
                     $('#coursesContainer').append(data);
                 });
-                cursoIndex++;
+                courseIndex++;
             });
 
             $(document).on('click', '.remove-experience', function () {
+                var experienceId = $(this).data('id');
+                experiencesToBeDeleted.push(id);
+                $("#@Html.IdFor(x => x.ProfessionalExperienceRemoved)").val(experiencesToBeDeleted.join('-'))
                 $(this).closest('.experiencia-item').remove();
             });
 
             $(document).on('click', '.remove-course', function () {
+                var courseId = $(this).data('id');
+                coursesToBeDeleted.push(id);
+                $("#@Html.IdFor(x => x.CoursesRemoved)").val(coursesToBeDeleted.join('-'))
                 $(this).closest('.curso-item').remove();
             });
 

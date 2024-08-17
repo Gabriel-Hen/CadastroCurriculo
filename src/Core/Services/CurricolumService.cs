@@ -69,4 +69,46 @@ public class CurricolumService : ICurricolumService
     {
         return await _curricolumRepository.GetById(id);
     }
+
+    public async Task<Curricolum> Update(CurricolumUpdateRequest request)
+    {
+        var curricolum = _mapper.Map<Curricolum>(request);
+        var curricolumCreated = await _curricolumRepository.Update(curricolum);
+
+        if (request.ProfessionalExperiences.Any())
+        {
+            request.ProfessionalExperiences.Select(
+                async professionalExperience => await _professionExperienceService.Update(
+                    curricolumCreated.Id,
+                    professionalExperience
+                )
+            );
+        }
+
+        if (request.Courses.Any())
+        {
+            request.Courses.Select(
+                async course => await _courseService.Update(
+                    curricolumCreated.Id,
+                    course
+                )
+            );
+        }
+
+
+        var coursesToBeDeleted = request.CoursesRemoved.Split('-');
+        var experiencesToBeDeleted = request.ProfessionalExperienceRemoved.Split('-');
+
+        if (coursesToBeDeleted.Any()) 
+        {
+            coursesToBeDeleted.Select(async x => await _courseService.Delete(int.Parse(x)));
+        }
+
+        if (experiencesToBeDeleted.Any())
+        {
+            experiencesToBeDeleted.Select(async x => await _professionExperienceService.Delete(int.Parse(x)));
+        }
+
+        return curricolumCreated;
+    }
 }

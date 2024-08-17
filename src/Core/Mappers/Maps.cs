@@ -12,5 +12,6 @@ public class Maps : Profile
         CreateMap<CurricolumRequest, Curricolum>().ReverseMap();
         CreateMap<ProfessionalExperienceRequest, ProfessionalExperience>().ReverseMap();
         CreateMap<CourseRequest, Course>().ReverseMap();
+        CreateMap<CurricolumUpdateRequest, Course>().ReverseMap();
     }
 }

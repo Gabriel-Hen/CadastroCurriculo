@@ -36,4 +36,33 @@ public class CurricolumRepository : ICurricolumRepository
     {
         return await _dbSet.Where(c => c.UserId == userId).ToListAsync();
     }
+
+    public async Task<bool> Delete(int id)
+    {
+        var curricolum = await _dbSet.FindAsync(id);
+        if (curricolum == null)
+        {
+            return false;
+        }
+        else
+        {
+            _dbSet.Remove(curricolum);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+    }
+
+    public async Task<Curricolum> Update(Curricolum curricolum)
+    {
+        var curricolumEntity = await _dbSet.FindAsync(curricolum.Id);
+        if (curricolumEntity == null)
+        {
+            throw new Exception($"Nao foi encontrado nenhum curriculo com o id {curricolum.Id}");
+        }
+
+        curricolumEntity = curricolum;
+        await _dbContext.SaveChangesAsync();
+        return curricolumEntity;
+    }
 }

@@ -29,4 +29,25 @@ public class ProfessionalExperienceService : IProfessionExperienceService
 
         return professionalExperience;
     }
+
+    public async Task<bool> Delete(int id)
+    {
+        return await _professionalExperienceRepository.Delete(id);
+    }
+
+    public async Task<ProfessionalExperience> Update(int curricolumId, ProfessionalExperienceRequest request)
+    {
+        ProfessionalExperience professionalExperience;
+        if (request.Id == null)
+        {
+            professionalExperience = await Create(curricolumId, request);
+        }
+        else
+        {
+            professionalExperience = _mapper.Map<ProfessionalExperience>(request);
+            professionalExperience = await _professionalExperienceRepository.Update(professionalExperience);
+        }
+
+        return professionalExperience;
+    }
 }

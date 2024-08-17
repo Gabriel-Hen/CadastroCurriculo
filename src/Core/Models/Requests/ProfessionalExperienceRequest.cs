@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Core.Models.Requests;
 public class ProfessionalExperienceRequest
 {
+    public int? Id { get; set; }
+
     [Required(ErrorMessage = "Cargo é obrigatório")]
     public string Role { get; set; }
 
@@ -14,6 +16,6 @@ public class ProfessionalExperienceRequest
     public string CompanyName { get; set; }
 
     [Required(ErrorMessage = "Data de inicio é obrigatório")]
-    public DateOnly InitialDate { get; set; }
+    public DateOnly? InitialDate { get; set; }
     public DateOnly? EndDate { get; set; }
 }

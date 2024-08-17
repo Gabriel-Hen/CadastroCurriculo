@@ -20,4 +20,33 @@ public class CourseRepository : ICourseRepository
 
         return course;
     }
+
+    public async Task<bool> Delete(int id)
+    {
+        var course = await _dbSet.FindAsync(id);
+        if (course == null)
+        {
+            return false;
+        }
+        else
+        {
+            _dbSet.Remove(course);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+    }
+
+    public async Task<Course> Update(Course course)
+    {
+        var courseEntity = await _dbSet.FindAsync(course.Id);
+        if (courseEntity == null)
+        {
+            throw new Exception($"Nao foi encontrado nenhum curso com o id {course.Id}");
+        }
+
+        courseEntity = course;
+        await _context.SaveChangesAsync();
+        return courseEntity;
+    }
 }
