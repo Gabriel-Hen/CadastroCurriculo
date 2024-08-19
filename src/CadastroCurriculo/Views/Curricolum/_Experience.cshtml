@@ -2,6 +2,7 @@
 @model ProfessionalExperienceRequest;
 
 <div class="experience-item">
+    <input asp-for="Id" hidden/>
     <div class="row gy-2">
         <div class="col-sm-6 col-md-4">
             <label asp-for="Role" class="col-form-label col-form-label-sm">Cargo:*</label>
@@ -19,13 +20,13 @@
     <div class="row gy-2">
         <div class="col-sm-6 col-md-4">
             <label asp-for="InitialDate" class="col-form-label col-form-label-sm">Data Início:*</label>
-            <input asp-for="InitialDate" type="date" class="form-control form-control-sm" placeholer="dd/MM/yyyy" autocomplete="off" required />
+            <input asp-for="InitialDate" class="form-control form-control-sm" data-type="date" placeholer="dd/MM/yyyy" autocomplete="off" required />
             <span asp-validation-for="InitialDate"></span>
         </div>
 
         <div class="col-sm-6 col-md-4">
             <label asp-for="EndDate" class="col-form-label col-form-label-sm">Data Fim:</label>
-            <input asp-for="EndDate" type="date" class="form-control form-control-sm" placeholer="dd/MM/yyyy" autocomplete="off" />
+            <input asp-for="EndDate" class="form-control form-control-sm" data-type="date" placeholer="dd/MM/yyyy" autocomplete="off" />
             <span asp-validation-for="EndDate"></span>
         </div>
     </div>

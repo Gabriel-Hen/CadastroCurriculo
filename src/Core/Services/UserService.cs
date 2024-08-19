@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using Core.Exceptions;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using Core.Models.Requests;
-using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Core.Services;
@@ -17,10 +18,15 @@ public class UserService : IUserService
         _mapper = mapper;
         _userRepository = userRepository;
     }
-    public Task<User> Create(CreateAccountRequest request)
+    public async Task<User> Create(CreateAccountRequest request)
     {
         var user = _mapper.Map<User>(request);
-        var createdUser = _userRepository.Create(user);
+        var userWithSameEmail = await _userRepository.GetByEmail(request.Email);
+        if (userWithSameEmail.Any())
+        {
+            throw new ValidationException("mesmo-email", "Já existe outro usuário com o mesmo e-mail.");
+        }
+        var createdUser = await _userRepository.Create(user);
 
         return createdUser;
     }

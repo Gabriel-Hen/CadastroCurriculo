@@ -1,5 +1,6 @@
 ﻿using Core.Enums;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities;
@@ -16,4 +17,6 @@ public class User
     public Status Status { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
+
+    public IEnumerable<Curricolum> Curricolums { get; set; }
 }

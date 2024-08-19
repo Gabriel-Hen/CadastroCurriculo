@@ -29,7 +29,7 @@ public class CurricolumRepository : ICurricolumRepository
 
     public async Task<Curricolum> GetById(int id)
     {
-        return await _dbSet.Include(c => c.ProfessionalExperience).Include(c => c.Courses).FirstOrDefaultAsync(c => c.Id == id);
+        return await _dbSet.Include(c => c.ProfessionalExperiences).Include(c => c.Courses).FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task<IEnumerable<Curricolum>> GetAllByUserId(int userId)
@@ -61,7 +61,7 @@ public class CurricolumRepository : ICurricolumRepository
             throw new Exception($"Nao foi encontrado nenhum curriculo com o id {curricolum.Id}");
         }
 
-        curricolumEntity = curricolum;
+        _dbContext.Entry(curricolumEntity).CurrentValues.SetValues(curricolum);
         await _dbContext.SaveChangesAsync();
         return curricolumEntity;
     }

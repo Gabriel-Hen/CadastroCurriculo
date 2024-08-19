@@ -30,4 +30,8 @@ public class UserRepository : IUserRepository
     {
         return await _dbSet.FindAsync(id);
     }
+    public async Task<IEnumerable<User>> GetByEmail(string email)
+    {
+        return _dbSet.Where(user => user.Email == email).ToList();
+    }
 }

@@ -76,29 +76,29 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            let experienciaIndex = 0;
-            let cursoIndex = 0;
+            let experienceIndex = 0;
+            let courseIndex = 0;
 
             $('#addProfessionalExperience').click(function () {
-                $.get('@Url.Action("_Experience", "Curricolum")', { index: experienciaIndex }, function (data) {
+                $.get('@Url.Action("_Experience", "Curricolum")', { index: experienceIndex }, function (data) {
                     $('#professionalExperienceContainer').append(data);
                 });
-                experienciaIndex++;
+                experienceIndex++;
             });
 
             $('#addCourse').click(function () {
-                $.get('@Url.Action("_Course", "Curricolum")', { index: cursoIndex }, function (data) {
+                $.get('@Url.Action("_Course", "Curricolum")', { index: courseIndex }, function (data) {
                     $('#coursesContainer').append(data);
                 });
-                cursoIndex++;
+                courseIndex++;
             });
 
             $(document).on('click', '.remove-experience', function () {
-                $(this).closest('.experiencia-item').remove();
+                $(this).closest('.experience-item').remove();
             });
 
             $(document).on('click', '.remove-course', function () {
-                $(this).closest('.curso-item').remove();
+                $(this).closest('.course-item').remove();
             });
 
             $("input[type='date']").datepicker({

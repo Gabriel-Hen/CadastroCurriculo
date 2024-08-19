@@ -4,13 +4,22 @@
 @model CurricolumUpdateRequest;
 @inject AuthenticatedUser authenticatedUser;
 @{
-    var ProfessionalExperiencesList = Model.ProfessionalExperiences.ToList();
-    var CoursesList = Model.Courses.ToList();
+    var ProfessionalExperiences = new List<ProfessionalExperienceRequest>();
+    var Courses = new List<CourseRequest>();
+    if (Model.ProfessionalExperiences.Any())
+    {
+        ProfessionalExperiences = Model.ProfessionalExperiences.ToList();
+    }
+
+    if (Model.Courses.Any())
+    {
+        Courses = Model.Courses.ToList();
+    }
 }
 
 <partial name="_Messages" />
 
-<form class="form-horizontal needs-validation" id="form" action="~/curriculo/cadastrar" method="post" novalidate>
+<form class="form-horizontal needs-validation" id="form" action="~/curriculo/@Model.Id/editar" method="post" novalidate>
     @Html.AntiForgeryToken()
 
     <div class="card">
@@ -62,8 +71,8 @@
             <h4>Experiencias profissionais</h4>
             @for(int i = 0; i < Model.ProfessionalExperiences.Count(); i++)
             {
-                <partial name="_ExperienceUpdate" for="@ProfessionalExperiencesList[i]"
-                         prefix="ProfessionalExperience[@i]" view-data='new ViewDataDictionary(ViewData){{"id", ProfessionalExperiencesList[i].Id}}'>
+                <partial name="_Experience" for="@ProfessionalExperiences[i]"
+                         prefix="ProfessionalExperiences[@i]" view-data='new ViewDataDictionary(ViewData){{"id", ProfessionalExperiences[i].Id}}'>
                 </partial>
             }
             <div id="professionalExperienceContainer"></div>
@@ -73,7 +82,7 @@
             <h4>Cursos</h4>
             @for(int i = 0; i < Model.Courses.Count(); i++)
             {
-                <partial name="_CourseUpdate" for="@CoursesList[i]" prefix="Course[@i]" view-data='new ViewDataDictionary(ViewData){{"id", CoursesList[i].Id}}'>
+                <partial name="_Course" for="@Courses[i]" prefix="Courses[@i]" view-data='new ViewDataDictionary(ViewData){{"id", Courses[i].Id}}'>
                 </partial>
             }
             <div id="coursesContainer"></div>
@@ -83,6 +92,7 @@
 
     <input asp-for="CoursesRemoved" type="hidden" hidden />
     <input asp-for="ProfessionalExperienceRemoved" type="hidden" hidden />
+    <input asp-for="Id" type="hidden"/>
 
     <div class="card">
         <div class="card-body">
@@ -115,19 +125,26 @@
 
             $(document).on('click', '.remove-experience', function () {
                 var experienceId = $(this).data('id');
-                experiencesToBeDeleted.push(id);
+                if (experienceId != false) {
+
+                    experiencesToBeDeleted.push(experienceId);
+                }
+
                 $("#@Html.IdFor(x => x.ProfessionalExperienceRemoved)").val(experiencesToBeDeleted.join('-'))
-                $(this).closest('.experiencia-item').remove();
+                $(this).closest('.experience-item').remove();
             });
 
             $(document).on('click', '.remove-course', function () {
                 var courseId = $(this).data('id');
-                coursesToBeDeleted.push(id);
+                if(courseId != false) {
+
+                    coursesToBeDeleted.push(courseId);
+                }
                 $("#@Html.IdFor(x => x.CoursesRemoved)").val(coursesToBeDeleted.join('-'))
-                $(this).closest('.curso-item').remove();
+                $(this).closest('.course-item').remove();
             });
 
-            $("input[type='date']").datepicker({
+            $("[data-type='date']").datepicker({
                 dateFormat: 'dd/mm/yy',
                 regional: 'pt-BR'
             });

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240816001351_InitialMigration")]
+    [Migration("20240819013158_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -65,6 +65,9 @@ namespace DataBase.Migrations
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
@@ -175,7 +178,7 @@ namespace DataBase.Migrations
             modelBuilder.Entity("Core.Entities.Curricolum", b =>
                 {
                     b.HasOne("Core.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Curricolums")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -199,6 +202,11 @@ namespace DataBase.Migrations
                     b.Navigation("Courses");
 
                     b.Navigation("ProfessionalExperience");
+                });
+
+            modelBuilder.Entity("Core.Entities.User", b =>
+                {
+                    b.Navigation("Curricolums");
                 });
 #pragma warning restore 612, 618
         }

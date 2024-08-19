@@ -34,22 +34,12 @@ public class CurricolumService : ICurricolumService
         var curricolumCreated = await _curricolumRepository.Create(curricolum);
         if (request.ProfessionalExperiences.Any())
         {
-            request.ProfessionalExperiences.Select(
-                async professionalExperience => await _professionExperienceService.Create(
-                    curricolumCreated.Id,
-                    professionalExperience
-                )
-            );
+            _professionExperienceService.CreateMultiple(curricolumCreated.Id, request.ProfessionalExperiences);
         }
 
         if (request.Courses.Any())
         {
-            request.Courses.Select(
-                async course => await _courseService.Create(
-                    curricolumCreated.Id,
-                    course
-                )
-            );
+            _courseService.CreateMultiple(curricolumCreated.Id, request.Courses);
         }
 
         return curricolumCreated;
@@ -70,45 +60,39 @@ public class CurricolumService : ICurricolumService
         return await _curricolumRepository.GetById(id);
     }
 
-    public async Task<Curricolum> Update(CurricolumUpdateRequest request)
+    public async Task<Curricolum> Update(int authenticatedUserId, CurricolumUpdateRequest request)
     {
         var curricolum = _mapper.Map<Curricolum>(request);
-        var curricolumCreated = await _curricolumRepository.Update(curricolum);
+        curricolum.UserId = authenticatedUserId;
+        var curricolumUpdated = await _curricolumRepository.Update(curricolum);
 
         if (request.ProfessionalExperiences.Any())
         {
-            request.ProfessionalExperiences.Select(
-                async professionalExperience => await _professionExperienceService.Update(
-                    curricolumCreated.Id,
-                    professionalExperience
-                )
-            );
+            await _professionExperienceService.UpdateMultiple(curricolumUpdated.Id, request.ProfessionalExperiences);
         }
 
         if (request.Courses.Any())
         {
-            request.Courses.Select(
-                async course => await _courseService.Update(
-                    curricolumCreated.Id,
-                    course
-                )
-            );
+            await _courseService.UpdateMultiple(curricolumUpdated.Id, request.Courses);
         }
 
-
-        var coursesToBeDeleted = request.CoursesRemoved.Split('-');
-        var experiencesToBeDeleted = request.ProfessionalExperienceRemoved.Split('-');
-
-        if (coursesToBeDeleted.Any()) 
+        if (!string.IsNullOrEmpty(request.CoursesRemoved))
         {
-            coursesToBeDeleted.Select(async x => await _courseService.Delete(int.Parse(x)));
+            var coursesToBeDeleted = request.CoursesRemoved.Split('-');
+            
+            var idsAsInt = coursesToBeDeleted.Select(x => int.Parse(x));
+            await _courseService.DeleteMultiple(idsAsInt);
+
         }
 
-        if (experiencesToBeDeleted.Any())
+        if (!string.IsNullOrEmpty(request.ProfessionalExperienceRemoved))
         {
-            experiencesToBeDeleted.Select(async x => await _professionExperienceService.Delete(int.Parse(x)));
+            var experiencesToBeDeleted = request.ProfessionalExperienceRemoved.Split('-');
+
+            var idsAsInt = experiencesToBeDeleted.Select(x => int.Parse(x));
+            await _professionExperienceService.DeleteMultiple(idsAsInt);
         }
 
-        return curricolumCreated;
+        return curricolumUpdated;
     }
 }

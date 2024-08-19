@@ -10,5 +10,5 @@ public interface ICurricolumService
     Task<Curricolum> Create(CurricolumRequest request, int authenticatedUserId);
     Task<Curricolum> GetById(int id);
     Task<IEnumerable<Curricolum>> GetAll();
-    Task<Curricolum> Update(CurricolumUpdateRequest request);
+    Task<Curricolum> Update(int authentiatedUserId, CurricolumUpdateRequest request);
 }

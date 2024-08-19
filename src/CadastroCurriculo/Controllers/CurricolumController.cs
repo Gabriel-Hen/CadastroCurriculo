@@ -59,7 +59,6 @@ public class CurricolumController : Controller
     }
 
     [HttpGet("{id}/editar")]
-
     public async Task<IActionResult> Update(int Id)
     {
         var curricolum = await _curricolumService.GetById(Id);
@@ -68,7 +67,11 @@ public class CurricolumController : Controller
     }
 
     [HttpPost("{id}/editar"), ValidateAntiForgeryToken]
-    public async Task<IActionResult> Update(int Id, [FromForm] CurricolumUpdateRequest request)
+    public async Task<IActionResult> Update(
+        int Id,
+        [FromForm] CurricolumUpdateRequest request,
+        [FromServices] AuthenticatedUser authenticatedUser
+    )
     {
         if (!ModelState.IsValid)
         {
@@ -77,7 +80,7 @@ public class CurricolumController : Controller
 
         try
         {
-            var curricolum = await _curricolumService.Update(request);
+            var curricolum = await _curricolumService.Update(authenticatedUser.Id, request);
 
             TempData["Success"] = $"Curriculo {curricolum.Name} alterado com sucesso";
             return RedirectToAction(nameof(Index));
@@ -95,7 +98,7 @@ public class CurricolumController : Controller
     public IActionResult _Experience(int index) 
     {
         ViewData["id"] = false;
-        ViewData.TemplateInfo.HtmlFieldPrefix = $"ProfessionalExperience[{index}]";
+        ViewData.TemplateInfo.HtmlFieldPrefix = $"ProfessionalExperiences[{index}]";
         return PartialView(new ProfessionalExperienceRequest());
     }
 
@@ -103,7 +106,7 @@ public class CurricolumController : Controller
     public IActionResult _Course(int index)
     {
         ViewData["id"] = false;
-        ViewData.TemplateInfo.HtmlFieldPrefix = $"Course[{index}]";
+        ViewData.TemplateInfo.HtmlFieldPrefix = $"Courses[{index}]";
         return PartialView(new CourseRequest());
     }
 }

@@ -45,7 +45,7 @@ public class ProfessionalExperienceRepository : IProfessionalExperienceRepositor
             throw new Exception($"Nao foi encontrado nenhuma experiencia profissional com o id {professionalExperience.Id}");
         }
 
-        professionalExperienceEntity = professionalExperience;
+        _context.Entry(professionalExperienceEntity).CurrentValues.SetValues(professionalExperience);
         await _context.SaveChangesAsync();
         return professionalExperienceEntity;
     }

@@ -45,7 +45,7 @@ public class CourseRepository : ICourseRepository
             throw new Exception($"Nao foi encontrado nenhum curso com o id {course.Id}");
         }
 
-        courseEntity = course;
+        _context.Entry(courseEntity).CurrentValues.SetValues(course);
         await _context.SaveChangesAsync();
         return courseEntity;
     }
