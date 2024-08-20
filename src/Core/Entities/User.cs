@@ -11,7 +11,7 @@ public class User
     public string Name { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
-    public string Document { get; set; }
+    public string Cpf { get; set; }
     public Gender Gender { get; set; }
     public string Password { get; set; }
     public Status Status { get; set; }

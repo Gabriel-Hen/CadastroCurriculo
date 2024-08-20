@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240819013158_InitialMigration")]
+    [Migration("20240820021228_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -132,11 +132,11 @@ namespace DataBase.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Cpf")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Document")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Email")
                         .HasColumnType("longtext");
@@ -189,7 +189,7 @@ namespace DataBase.Migrations
             modelBuilder.Entity("Core.Entities.ProfessionalExperience", b =>
                 {
                     b.HasOne("Core.Entities.Curricolum", "Curricolum")
-                        .WithMany("ProfessionalExperience")
+                        .WithMany("ProfessionalExperiences")
                         .HasForeignKey("CurricolumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -201,7 +201,7 @@ namespace DataBase.Migrations
                 {
                     b.Navigation("Courses");
 
-                    b.Navigation("ProfessionalExperience");
+                    b.Navigation("ProfessionalExperiences");
                 });
 
             modelBuilder.Entity("Core.Entities.User", b =>

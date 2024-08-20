@@ -54,7 +54,7 @@
 
                 <div class="col-sm-2 col-md-2">
                     <label asp-for="SalaryExpectation" class="col-form-label col-form-label-sm">Pretencao salarial*:</label>
-                    <input asp-for="SalaryExpectation" class="form-control form-control-sm" required />
+                    <input asp-for="SalaryExpectation" class="form-control form-control-sm" data-toggle="input-mask" data-mask-format="#.##0,00" required />
                     <span asp-validation-for="SalaryExpectation"></span>
                 </div>
             </div>
@@ -103,51 +103,63 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            let experienceIndex = @Model.ProfessionalExperiences.Count();
-            let courseIndex = @Model.Courses.Count();
-            var coursesToBeDeleted = [];
-            var experiencesToBeDeleted = [];
+        (function (curricolum) {
+            'use strict'
 
-            $('#addProfessionalExperience').click(function () {
-                $.get('@Url.Action("_Experience", "Curricolum")', { index: experienceIndex }, function (data) {
-                    $('#professionalExperienceContainer').append(data);
+            function addDatepicker() {
+                $("[data-type='date']").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    regional: 'pt-BR'
                 });
-                experienceIndex++;
-            });
+            }
 
-            $('#addCourse').click(function () {
-                $.get('@Url.Action("_Course", "Curricolum")', { index: courseIndex }, function (data) {
-                    $('#coursesContainer').append(data);
+            $(document).ready(function () {
+
+                let experienceIndex = @Model.ProfessionalExperiences.Count();
+                let courseIndex = @Model.Courses.Count();
+                var coursesToBeDeleted = [];
+                var experiencesToBeDeleted = [];
+
+                $('#addProfessionalExperience').click(function () {
+                    $.get('@Url.Action("_Experience", "Curricolum")', { index: experienceIndex }, function (data) {
+                        $('#professionalExperienceContainer').append(data);
+                        addDatepicker();
+                    });
+                    experienceIndex++;
                 });
-                courseIndex++;
+
+                $('#addCourse').click(function () {
+                    $.get('@Url.Action("_Course", "Curricolum")', { index: courseIndex }, function (data) {
+                        $('#coursesContainer').append(data);
+                        addDatepicker();
+                    });
+                    courseIndex++;
+
+                });
+
+                $(document).on('click', '.remove-experience', function () {
+                    var experienceId = $(this).data('id');
+                    if (experienceId != false) {
+
+                        experiencesToBeDeleted.push(experienceId);
+                    }
+
+                    $("#@Html.IdFor(x => x.ProfessionalExperienceRemoved)").val(experiencesToBeDeleted.join('-'))
+                    $(this).closest('.experience-item').remove();
+                });
+
+                $(document).on('click', '.remove-course', function () {
+                    var courseId = $(this).data('id');
+                    if (courseId != false) {
+
+                        coursesToBeDeleted.push(courseId);
+                    }
+                    $("#@Html.IdFor(x => x.CoursesRemoved)").val(coursesToBeDeleted.join('-'))
+                    $(this).closest('.course-item').remove();
+                });
+
+                addDatepicker();         
             });
-
-            $(document).on('click', '.remove-experience', function () {
-                var experienceId = $(this).data('id');
-                if (experienceId != false) {
-
-                    experiencesToBeDeleted.push(experienceId);
-                }
-
-                $("#@Html.IdFor(x => x.ProfessionalExperienceRemoved)").val(experiencesToBeDeleted.join('-'))
-                $(this).closest('.experience-item').remove();
-            });
-
-            $(document).on('click', '.remove-course', function () {
-                var courseId = $(this).data('id');
-                if(courseId != false) {
-
-                    coursesToBeDeleted.push(courseId);
-                }
-                $("#@Html.IdFor(x => x.CoursesRemoved)").val(coursesToBeDeleted.join('-'))
-                $(this).closest('.course-item').remove();
-            });
-
-            $("[data-type='date']").datepicker({
-                dateFormat: 'dd/mm/yy',
-                regional: 'pt-BR'
-            });
-        });
+        }(Curricolum))
     </script>
 }

@@ -8,4 +8,5 @@ public interface IUserService
     Task<User> GetById(int id);
     Task<User> GetByEmailPassword(string email, string password);
     Task<User> Create(CreateAccountRequest request);
+    Task<User> Update(UpdateUserRequest request);
 }

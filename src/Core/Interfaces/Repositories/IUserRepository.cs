@@ -10,4 +10,6 @@ public interface IUserRepository
     Task<User> Create(User user);
     Task<IEnumerable<User>> GetByEmail(string email);
 
+    Task<User> Update(User user);
+
 }

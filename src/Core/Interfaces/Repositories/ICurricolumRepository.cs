@@ -13,4 +13,5 @@ public interface ICurricolumRepository
     Task<IEnumerable<Curricolum>> GetAllByUserId(int userId);
     Task<Curricolum> Create(Curricolum curricolum);
     Task<Curricolum> Update(Curricolum curricolum);
+    Task<bool> Delete(int id);
 }

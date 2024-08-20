@@ -8,18 +8,42 @@ using Core.Exceptions;
 using CadastroCurriculo.Authorization;
 using Core.Models.Requests;
 using FluentValidation.AspNetCore;
+using System.Globalization;
 
 namespace CadastroCurriculo.Controllers;
 [AllowAnonymous]
 public class HomeController : Controller
 {
-    [HttpGet]
-    public IActionResult Index()
+    private readonly ICurricolumService _curricolumService;
+
+    public HomeController(ICurricolumService curricolumService)
     {
+        _curricolumService = curricolumService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        var curricolums = await _curricolumService.GetAll();
+        decimal average = 0;
+        if (curricolums.Any())
+        {
+            average = curricolums.Sum(x => x.SalaryExpectation) / curricolums.Count();
+        }
+
+        ViewData["average"] = average;
+        ViewData["averageAsString"] = average.ToString("N", CultureInfo.CurrentCulture);
+
         return View("Index");
     }
 
-    [HttpPost("login")]
+    [HttpGet("login")]
+    public IActionResult Login()
+    {
+        return View("Login");
+    }
+
+    [HttpPost("login"), ValidateAntiForgeryToken]
     public async Task<IActionResult> LogIn(
         [FromServices] IUserService userService,
         [FromForm] AuthenticationRequest request
@@ -27,7 +51,7 @@ public class HomeController : Controller
     {
         if (!ModelState.IsValid)
         {
-            return Index();
+            return Login();
         }
 
         var usuario = await GetUserAsync(userService, request);
@@ -35,7 +59,7 @@ public class HomeController : Controller
         if (usuario == null)
         {
             ModelState.AddModelError("login", "Usuário ou senha inválida");
-            return Index();
+            return Login();
         }
 
         var claimPrincipal = ClaimsPrincipalFactory.Create(usuario);
@@ -70,7 +94,7 @@ public class HomeController : Controller
         return View(new CreateAccountRequest());
     }
 
-    [HttpPost("criar-conta")]
+    [HttpPost("criar-conta"), ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateAccount(
         [FromForm] CreateAccountRequest createAccountRequest,
         [FromServices] IUserService userService

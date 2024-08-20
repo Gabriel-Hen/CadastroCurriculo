@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using Core.Models.Requests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,6 +32,8 @@ public class CurricolumService : ICurricolumService
     {
         var curricolum = _mapper.Map<Curricolum>(request);
         curricolum.UserId = authenticatedUserId;
+        curricolum.CreatedAt = DateTime.UtcNow;
+
         var curricolumCreated = await _curricolumRepository.Create(curricolum);
         if (request.ProfessionalExperiences.Any())
         {
@@ -43,6 +46,11 @@ public class CurricolumService : ICurricolumService
         }
 
         return curricolumCreated;
+    }
+
+    public async Task<bool> Delete(int id)
+    {
+        return await _curricolumRepository.Delete(id);
     }
 
     public async Task<IEnumerable<Curricolum>> GetAll()
@@ -64,6 +72,8 @@ public class CurricolumService : ICurricolumService
     {
         var curricolum = _mapper.Map<Curricolum>(request);
         curricolum.UserId = authenticatedUserId;
+        curricolum.UpdatedAt = DateTime.UtcNow;
+
         var curricolumUpdated = await _curricolumRepository.Update(curricolum);
 
         if (request.ProfessionalExperiences.Any())

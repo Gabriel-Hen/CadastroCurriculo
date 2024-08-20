@@ -1,94 +1,68 @@
-﻿@using Core.Models.Requests
-@model AuthenticationRequest
-@{
-    Layout = null;
-}
+﻿@using System.Globalization
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <p><b>Curriculos</b></p>
+        </div>
+    </div>
+</div>
 
-<!DOCTYPE html>
-<html lang="pt-br" data-topbar-color="light" data-menu-color="light">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] Cadastro de Curriculo</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
-</head>
+<partial name="_Messages" />
 
-<body class="authentication-bg">
-    <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xxl-4 col-lg-5">
-                    <div class="card">
-                        <div class="card-body p-4">
-                            <div class="text-center w-75 m-auto">
-                                <h4 class="text-dark-50 text-center pb-0 fw-bold">Login</h4>
-                                <p class="text-muted mb-4">Informe seu e-mail e sua senha.</p>
-                            </div>
-
-                            <partial name="_Messages" />
-
-                            <form action="~/login" method="post" novalidate>
-                                <div class="mb-2">
-                                    <label asp-for="Email" class="form-label">E-mail*</label>
-                                    <input asp-for="Email" class="form-control" type="email" id="emailaddress" required="" placeholder="E-mail">
-                                    <span asp-validation-for="Email"></span>
-                                </div>
-
-                                <div class="mb-2">
-                                    <label asp-for="Password" class="form-label">Senha*</label>
-                                    <div class="input-group input-group-merge">
-                                        <input asp-for="Password" type="password" id="pass" class="form-control" placeholder="Senha">
-                                        <span asp-validation-for="Password"></span>
-                                        <a id="btn-pass" class="btn btn-dark bi bi-eye"></a>
-                                    </div>
-                                </div>
-
-                                <div class="mb-2">
-                                    <div class="form-check">
-                                        <input asp-for="KeepLoggedIn" class="form-check-input" id="checkbox-signin" checked="">
-                                        <label class="form-check-label" for="checkbox-signin">Manter conectado</label>
-                                    </div>
-                                </div>
-
-                                <div class="text-center">
-                                    <button class="btn btn-primary" type="submit"> Entrar </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body p-4">
-                            <div class="text-center w-75 m-auto">
-                                <h4 class="text-dark-50 text-center pb-0 fw-bold">Cadastrar</h4>
-                                <p class="text-muted mb-4">Não possui conta? Cadastre-se agora.</p>
-                            </div>
-
-                            <div class="text-center">
-                                <a class="btn btn-secondary" href="~/criar-conta"> Cadastrar-se </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 overflow-auto">
+                <table id="listagem" class="table table-striped wrap w-100 dataTable">
+                    <tfoot>
+                        <tr>
+                            <th>Pretencao salarial</th>
+                            <th>R$ @ViewData["averageAsString"]</th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+@section Scripts {
+    <script type="text/javascript">
+        (function (curricolum) {
+            "use strict";
+            $(document).ready(function () {
+                "use strict";
 
-    <script>
-        $(document).on("click", "#btn-pass", function () {
-            if ($("#pass").attr("type") == "text") {
-                $("#pass").attr("type", "password");
-                $("#btn-pass").attr("class", "btn btn-dark bi bi-eye");
-            } else {
-                $("#pass").attr("type", "text");
-                $("#btn-pass").attr("class", "btn btn-dark bi bi-eye-slash");
-            }
-        });
+                var datatable = $("#listagem").DataTable({
+                    order: [1, 'desc'],
+                    language: {
+                        url: "@Url.Content("~/json/datatables-pt-br.json")"
+                    },
+                    serverSide: true,
+                    ajax: {
+                        url: "/api/curriculo/obter-todos",
+                        type: "GET",
+
+                    },
+                    columns: [
+                        { data: "name", name: "Name", title: "Nome", orderable: false },
+                        {
+                            data: "salaryExpectation",
+                            name: "SalaryExpectation",
+                            title: "Pretensao",
+                            orderable: false,
+                            render: function (data) {
+                                return curricolum.formatCurrency(data);
+                            },
+                            createdCell: function (td, cellData, rowData, row, col) {
+                                var average = "@ViewData["average"]";
+                                average = average.replace(',', '.');
+                                return curricolum.setColorSalaryExpectation(cellData, td, parseFloat(average).toFixed(2));
+                            }
+                        }
+                    ]
+                });
+            })
+        }(Curricolum))
     </script>
-
-</body>
-</html>
+}

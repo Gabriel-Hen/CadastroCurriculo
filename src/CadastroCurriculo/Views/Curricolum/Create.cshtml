@@ -41,7 +41,7 @@
 
                 <div class="col-sm-2 col-md-2">
                     <label asp-for="SalaryExpectation" class="col-form-label col-form-label-sm">Pretencao salarial*:</label>
-                    <input asp-for="SalaryExpectation" class="form-control form-control-sm" required />
+                    <input asp-for="SalaryExpectation" class="form-control form-control-sm" data-toggle="input-mask" data-mask-format="#.##0,00" required />
                     <span asp-validation-for="SalaryExpectation"></span>
                 </div>
             </div>
@@ -75,6 +75,13 @@
 
 @section Scripts {
     <script>
+        function addDatepicker() {
+            $("[data-type='date']").datepicker({
+                dateFormat: 'dd/mm/yy',
+                regional: 'pt-BR'
+            });
+        }
+
         $(document).ready(function () {
             let experienceIndex = 0;
             let courseIndex = 0;
@@ -82,15 +89,19 @@
             $('#addProfessionalExperience').click(function () {
                 $.get('@Url.Action("_Experience", "Curricolum")', { index: experienceIndex }, function (data) {
                     $('#professionalExperienceContainer').append(data);
+                    addDatepicker();
                 });
                 experienceIndex++;
+
             });
 
             $('#addCourse').click(function () {
                 $.get('@Url.Action("_Course", "Curricolum")', { index: courseIndex }, function (data) {
                     $('#coursesContainer').append(data);
+                    addDatepicker();
                 });
                 courseIndex++;
+
             });
 
             $(document).on('click', '.remove-experience', function () {
@@ -101,10 +112,7 @@
                 $(this).closest('.course-item').remove();
             });
 
-            $("input[type='date']").datepicker({
-                dateFormat: 'dd/mm/yy',
-                regional: 'pt-BR'
-            });
+            
         });
     </script>
 }

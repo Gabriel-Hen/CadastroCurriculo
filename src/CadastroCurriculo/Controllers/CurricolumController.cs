@@ -63,6 +63,7 @@ public class CurricolumController : Controller
     {
         var curricolum = await _curricolumService.GetById(Id);
         var curricolumRequest = _mapper.Map<CurricolumUpdateRequest>(curricolum);
+
         return View(curricolumRequest);
     }
 
@@ -92,6 +93,23 @@ public class CurricolumController : Controller
 
             return await Update(Id);
         }
+    }
+
+    [HttpPost("{id}/delete")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        try
+        {
+            await _curricolumService.Delete(id);
+
+            TempData["Success"] = "Curriculo deletado com sucesso.";
+        }
+        catch (ValidationException ex) 
+        {
+            TempData["Erros"] = ex.GetErrorMessages();
+        }
+
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet("experiencia-profisional")]

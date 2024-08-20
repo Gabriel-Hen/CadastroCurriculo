@@ -11,4 +11,5 @@ public interface ICurricolumService
     Task<Curricolum> GetById(int id);
     Task<IEnumerable<Curricolum>> GetAll();
     Task<Curricolum> Update(int authentiatedUserId, CurricolumUpdateRequest request);
+    Task<bool> Delete(int id);
 }

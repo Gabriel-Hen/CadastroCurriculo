@@ -27,7 +27,7 @@ namespace DataBase.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Phone = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Document = table.Column<string>(type: "longtext", nullable: true)
+                    Cpf = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     Password = table.Column<string>(type: "longtext", nullable: true)

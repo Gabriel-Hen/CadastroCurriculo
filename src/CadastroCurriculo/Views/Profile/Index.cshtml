@@ -1,0 +1,97 @@
+﻿@using Core.Enums
+@using Core.Models.Requests
+@model UpdateUserRequest;
+
+<partial name="_Messages" />
+
+<form class="form-horizontal needs-validation" id="form" action="~/perfil" method="post" novalidate>
+    @Html.AntiForgeryToken()
+
+    <input asp-for="Id" hidden></input>
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">Dados</h4>
+
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label asp-for="Name" class="form-label">Nome completo:*</label>
+                    <input asp-for="Name" class="form-control" required="" placeholder="Nome completo*">
+                    <span asp-validation-for="Name"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Phone" class="form-label">Contato:*</label>
+                    <input asp-for="Phone" class="form-control" placeholder="(00) 0000-0000" data-toggle="input-mask" data-mask-format="(00) 00000-0000">
+                    <span asp-validation-for="Phone"></span>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Cpf" class="form-label">Cpf:*</label>
+                    <input asp-for="Cpf" class="form-control" placeholder="000.000.000-00" data-toggle="input-mask" data-mask-format="000.000.000-00">
+                    <span asp-validation-for="Cpf"></span>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label asp-for="Email" class="form-label">Email:*</label>
+                    <input asp-for="Email" class="form-control" type="email" id="emailaddress" required="" placeholder="E-mail*">
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Gender" class="form-label">Genero:*</label>
+                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Gender>()" data-toggle="select2" class="select2 form-select form-control"></select>
+                    <span asp-validation-for="Gender"></span>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <label asp-for="Password" class="form-label">Senha:</label>
+                    <div class="input-group input-group-merge">
+                        <input asp-for="Password" type="password" id="pass" class="form-control" placeholder="Senha">
+                        <a id="btn-pass" class="btn btn-dark bi bi-eye"></a>
+                    </div>
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="ConfirmPassword" class="form-label">Confirme sua senha:</label>
+                    <div class="input-group input-group-merge">
+                        <input asp-for="ConfirmPassword" type="password" id="confirm-pass" class="form-control" placeholder="Confirme sua senha">
+                        <a id="btn-confirm-pass" class="btn btn-dark bi bi-eye"></a>
+                    </div>
+                    <span asp-validation-for="ConfirmPassword"></span>
+                </div>
+            </div>            
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).on("click", "#btn-pass", function () {
+            if ($("#pass").attr("type") == "text") {
+                $("#pass").attr("type", "password");
+                $("#btn-pass").attr("class", "btn btn-dark bi bi-eye");
+            } else {
+                $("#pass").attr("type", "text");
+                $("#btn-pass").attr("class", "btn btn-dark bi bi-eye-slash");
+            }
+        });
+
+        $(document).on("click", "#btn-confirm-pass", function () {
+            if ($("#confirm-pass").attr("type") == "text") {
+                $("#confirm-pass").attr("type", "password");
+                $("#btn-confirm-pass").attr("class", "btn btn-dark bi bi-eye");
+            } else {
+                $("#confirm-pass").attr("type", "text");
+                $("#btn-confirm-pass").attr("class", "btn btn-dark bi bi-eye-slash");
+            }
+        });
+    </script>
+}

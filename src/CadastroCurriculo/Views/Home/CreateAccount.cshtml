@@ -26,7 +26,10 @@
                             <div class="text-center w-75 m-auto">
                                 <h4 class="text-dark-50 text-center pb-0 fw-bold">Cadastro de Conta</h4>
                             </div>
+                            <partial name="_Messages" />
+
                             <form action="~/criar-conta" method="post" class="needs-validation" novalidate>
+                                @Html.AntiForgeryToken()
                                 <div class="row mb-2">
                                     <div class="col-md-12">
                                         <input asp-for="Name" class="form-control" required="" placeholder="Nome completo*">
@@ -64,15 +67,15 @@
                                 <div class="row mb-2">
                                     <div class="col-md-12">
                                         <label asp-for="Phone" class="form-label">Contato*</label>
-                                        <input asp-for="Phone" class="form-control" placeholder="(00) 0000-0000">
+                                        <input asp-for="Phone" class="form-control" placeholder="(00) 0000-0000" data-toggle="input-mask" data-mask-format="(00) 00000-0000">
                                         <span asp-validation-for="Phone"></span>
                                     </div>
                                 </div>
                                 <div class="row mb-2">
                                     <div class="col-md-12">
-                                        <label asp-for="Document" class="form-label">Cpf*</label>
-                                        <input asp-for="Document" class="form-control" placeholder="000.000.000-00">
-                                        <span asp-validation-for="Document"></span>
+                                        <label asp-for="Cpf" class="form-label">Cpf*</label>
+                                        <input asp-for="Cpf" class="form-control" placeholder="000.000.000-00" data-toggle="input-mask" data-mask-format="000.000.000-00">
+                                        <span asp-validation-for="Cpf"></span>
                                     </div>
                                 </div>
                                 <div class="row mb-2">
@@ -94,8 +97,30 @@
         </div>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ui/ui/i18n/datepicker-pt-BR.js"></script>
+    <script src="~/js/lib.min.js"></script>
+
+    <script src="~/lib/jquery-ui-1.14.0/jquery-ui.min.js"></script>
+    <script src="~/lib/momentjs/momentjs.min.js"></script>
+    <script src="~/lib/momentjs/pt-br.js"></script>
+    <script src="~/lib/momentjs/configurar-pt-br.js"></script>
+    <script src="~/lib/datatables-1.11.4/js/jquery.datatables.min.js"></script>
+    <script src="~/lib/datatables-1.11.4/js/datatables.bootstrap5.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
+    <script src="~/lib/jquery-mask-plugin/jquery.mask.min.js"></script>
+    <script src="~/lib/jquery-plugin-mask-money/jquery.maskMoney.min.js"></script>
+    <script src="~/js/jquery-custom-validators.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+
+    <script src="~/js/app.js"></script>
+    <script src="~/js/jquery-extensions.js"></script>
+    <script src="~/js/curricolum.js"></script>
+    <script src="~/js/site.js"></script>
 
     <script>
         $(document).on("click", "#btn-pass", function () {

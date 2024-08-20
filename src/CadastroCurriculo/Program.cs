@@ -20,7 +20,6 @@ builder.Services.AddControllersWithViews(x =>
     x.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
     x.ModelBinderProviders.Insert(1, new DateTimeModelBinderProvider());
     x.ModelBinderProviders.Insert(2, new OnlyNumbersBinderProvider());
-    x.ModelBinderProviders.Insert(3, new PesquisaModelBinderProvider());
 })
 .AddJsonOptions(opts =>
 {
